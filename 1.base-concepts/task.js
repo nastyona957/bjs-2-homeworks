@@ -4,40 +4,43 @@
 function solveEquation(a, b, c) {
   const discriminant = Math.pow(b, 2) - 4 * a * c;
   
-  return discriminant < 0 
-    ? [] 
-    : discriminant === 0 
-      ? [-b / (2 * a)] 
-      : [
-          (-b + Math.sqrt(discriminant)) / (2 * a),
-          (-b - Math.sqrt(discriminant)) / (2 * a)
-        ];
+ if (d < 0) {
+    return [];
+  }
+  
+  if (d == 0) {
+    let x = -b / (2 * a);
+    return [x];
+  }
+  
+  let x1 = (-b + Math.sqrt(d)) / (2 * a);
+  let x2 = (-b - Math.sqrt(d)) / (2 * a);
+  return [x1, x2];
 }
+
 
 // Задача 2: Калькулятор ипотеки
 function calculateTotalMortgage(percent, contribution, amount, countMonths) {
-  const percentNum = parseFloat(percent);
-  const contributionNum = parseFloat(contribution);
-  const amountNum = parseFloat(amount);
-  const countMonthsNum = parseFloat(countMonths);
+  percent = parseFloat(percent);
+  contribution = parseFloat(contribution);
+  amount = parseFloat(amount);
+  countMonths = parseFloat(countMonths);
   
-  const isValid = [percentNum, contributionNum, amountNum, countMonthsNum]
-    .every(value => !isNaN(value));
-  
-  if (!isValid) {
+  if (isNaN(percent) || isNaN(contribution) || isNaN(amount) || isNaN(countMonths)) {
     return false;
   }
   
-  const monthlyPercent = percentNum / 100 / 12;
+  let P = percent / 100 / 12;
+  let S = amount - contribution;
   
-  const loanBody = amountNum - contributionNum;
+  if (S <= 0) {
+    return 0;
+  }
   
-  return loanBody === 0 
-    ? 0 
-    : Number(
-        (loanBody * (monthlyPercent + monthlyPercent / (Math.pow(1 + monthlyPercent, countMonthsNum) - 1)) * countMonthsNum)
-          .toFixed(2)
-      );
+  let payment = S * (P + P / (Math.pow(1 + P, countMonths) - 1));
+  let total = payment * countMonths;
+  
+  return Number(total.toFixed(2));
 }
 
 // Тестовые случаи для проверки
