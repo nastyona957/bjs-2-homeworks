@@ -44,7 +44,6 @@ function calculateTotalMortgage(percent, contribution, amount, countMonths) {
 function testCase() {
   console.log("Тестирование решения квадратных уравнений:");
   console.log("x² - 3x + 2 = 0:", solveEquation(1, -3, 2)); 
-  console.log("x² - 4x + 4 = 0:", solveEquation(1, -4, 4)); 
   
   console.log("\nТестирование калькулятора ипотеки:");
   console.log("10, 0, 50000, 12:", calculateTotalMortgage(10, 0, 50000, 12)); 
