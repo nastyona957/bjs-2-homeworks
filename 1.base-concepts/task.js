@@ -2,51 +2,57 @@
 
 // Задача 1: Решение квадратных уравнений
 function solveEquation(a, b, c) {
-  const discriminant = b ** 2 - 4 * a * c;
+  const discriminant = Math.pow(b, 2) - 4 * a * c;
   
-  if (discriminant < 0) {
-    return []; 
-  } else if (discriminant === 0) {
-    const root = -b / (2 * a);
-    return [root]; 
-    const root1 = (-b + Math.sqrt(discriminant)) / (2 * a);
-    const root2 = (-b - Math.sqrt(discriminant)) / (2 * a);
-    return [root1, root2]; 
-  }
+  return discriminant < 0 
+    ? [] 
+    : discriminant === 0 
+      ? [-b / (2 * a)] 
+      : [
+          (-b + Math.sqrt(discriminant)) / (2 * a),
+          (-b - Math.sqrt(discriminant)) / (2 * a)
+        ];
 }
 
 // Задача 2: Калькулятор ипотеки
 function calculateTotalMortgage(percent, contribution, amount, countMonths) {
-  percent = parseFloat(percent);
-  contribution = parseFloat(contribution);
-  amount = parseFloat(amount);
-  countMonths = parseFloat(countMonths);
+  const percentNum = parseFloat(percent);
+  const contributionNum = parseFloat(contribution);
+  const amountNum = parseFloat(amount);
+  const countMonthsNum = parseFloat(countMonths);
   
-  if (isNaN(percent) || isNaN(contribution) || isNaN(amount) || isNaN(countMonths)) {
+  const isValid = [percentNum, contributionNum, amountNum, countMonthsNum]
+    .every(value => !isNaN(value));
+  
+  if (!isValid) {
     return false;
   }
   
-  const monthlyPercent = percent / 100 / 12;
+  const monthlyPercent = percentNum / 100 / 12;
   
-  const loanBody = amount - contribution;
+  const loanBody = amountNum - contributionNum;
   
-  if (loanBody === 0) {
-    return 0;
-  }
-  
-  const monthlyPayment = loanBody * (monthlyPercent + monthlyPercent / ((1 + monthlyPercent) ** countMonths - 1));
-
-  const totalAmount = monthlyPayment * countMonths;
-  
-  return Number(totalAmount.toFixed(2));
+  return loanBody === 0 
+    ? 0 
+    : Number(
+        (loanBody * (monthlyPercent + monthlyPercent / (Math.pow(1 + monthlyPercent, countMonthsNum) - 1)) * countMonthsNum)
+          .toFixed(2)
+      );
 }
 
+// Тестовые случаи для проверки
 function testCase() {
   console.log("Тестирование решения квадратных уравнений:");
   console.log("x² - 3x + 2 = 0:", solveEquation(1, -3, 2)); 
+  console.log("x² - 4x + 4 = 0:", solveEquation(1, -4, 4)); 
+  console.log("x² + x + 1 = 0:", solveEquation(1, 1, 1)); 
   
   console.log("\nТестирование калькулятора ипотеки:");
   console.log("10, 0, 50000, 12:", calculateTotalMortgage(10, 0, 50000, 12)); 
   console.log("10, 1000, 50000, 12:", calculateTotalMortgage(10, 1000, 50000, 12)); 
-
+  console.log("10, 0, 20000, 24:", calculateTotalMortgage(10, 0, 20000, 24)); 
+  console.log("10, 1000, 20000, 24:", calculateTotalMortgage(10, 1000, 20000, 24)); 
+  console.log("10, 20000, 20000, 24:", calculateTotalMortgage(10, 20000, 20000, 24)); 
+  console.log("10, 0, 10000, 36:", calculateTotalMortgage(10, 0, 10000, 36)); 
+  console.log("15, 0, 10000, 36:", calculateTotalMortgage(15, 0, 10000, 36)); 
 }
